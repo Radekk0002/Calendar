@@ -1,0 +1,65 @@
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+
+@if (time != default(DateTime))
+{
+    <div class="d-flex justify-content-center align-items-center">
+        <Select TItem="int" SelectFirst="time.Hour" Size="5" Items="@hours" OnSelected="ChangeHour">
+            <TimeTemplate>
+                @(context.ToString("00"))
+            </TimeTemplate>
+        </Select>
+
+        <span class="m-0 ml-1 mr-1">:</span>
+
+        <Select TItem="int" SelectFirst="time.Minute" Size="10" Items="@minutes" OnSelected="ChangeMinute">
+            <TimeTemplate>
+                @(context.ToString("00"))
+            </TimeTemplate>
+        </Select>
+    </div>
+}
+
+
+@code {
+    DateTime time;
+    List<int> hours = new List<int>();
+    List<int> minutes = new List<int>();
+
+    [Parameter]
+    public DateTime Time { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTime> OnTimeChanged {  get;  set; }
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        time = Time;
+        for(int i = 0; i < 24; i++)
+        {
+            hours.Add(i);
+        }
+
+        for(int i = 0; i < 60; i++)
+        {
+            minutes.Add(i);
+        }
+    }
+
+    public async void ChangeHour(int i)
+    {
+
+        time = time.AddHours(i - time.Hour);
+  
+        await OnTimeChanged.InvokeAsync(time);
+    }
+
+    public async void ChangeMinute(int i)
+    {
+        time = time.AddMinutes(i - time.Minute);
+        await OnTimeChanged.InvokeAsync(time);
+    }
+
+}

@@ -1,0 +1,43 @@
+﻿@using Server.Models
+@using Server.Controls
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web;
+@page "/calendar"
+
+
+
+<AuthorizeView>
+    <Authorized>
+        <div id="appContainer" class="d-flex flex-column flex-md-row-reverse">
+            <div id="calendarWrapper" class="flex-md-grow-1 pt-5">
+                <h1 class="text-center mt-2">Calendar</h1>
+                <CascadingValue Value="this">
+                    <CalendarComponent></CalendarComponent>
+                </CascadingValue>
+
+            </div>
+            <div id="toDoList" class="flex-grow-1 flex-md-grow-0 pt-4">
+                <ToDoListComponent CalendarDay="@calendarDay"></ToDoListComponent>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorizedComponent/>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+
+
+
+@code{
+    private Day calendarDay = null;
+
+
+        public void SetNewCalendarDay(Day day)
+    {
+        calendarDay = day;
+        StateHasChanged();
+    }
+}

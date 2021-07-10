@@ -1,0 +1,109 @@
+﻿@using System.Globalization
+@using System.Collections
+@using Server.Models
+@inject MonthService monthService
+
+@if (month == null)
+{
+    <div class="loading"></div>
+}
+else
+{
+    <div class="container p-0 p-md-2 m-auto">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div id="year" class="d-flex align-items-center">
+                <span class="changeDateButton mr-3 pr-2 pl-2" @onclick="@(()=>{AddYears(-1);})">&lsaquo;</span>
+                <h3 class="mb-0">@date.Year</h3>
+                <span class="changeDateButton ml-3 pr-2 pl-2" @onclick="@(()=>{AddYears(1);})">&rsaquo;</span>
+            </div>
+
+
+            <div class="mt-1 d-flex justify-content-center">
+                <span class="changeDateButton mr-3 pr-2 pl-2" @onclick="@(()=>{AddMonths(-1);})">&lsaquo;</span>
+                <h2 class="mb-0">@month.GetName</h2>
+                <span class="changeDateButton ml-3 pr-2 pl-2" @onclick="@(()=>{AddMonths(1);})">&rsaquo;</span>
+            </div>
+
+        </div>
+
+        <div id="calendarContainer" class="d-flex flex-column">
+            <div id="calendarSubContainer">
+                <div class="calendarHeader d-flex justify-content-start">
+                    <h3>MON</h3>
+                    <h3>TUE</h3>
+                    <h3>WED</h3>
+                    <h3>THU</h3>
+                    <h3>FRI</h3>
+                    <h3>SAT</h3>
+                    <h3>SUN</h3>
+                </div>
+
+                <MonthComponent CalendarMonth=@month></MonthComponent>
+
+
+            </div>
+        </div>
+    </div>
+
+}
+
+@code {
+    DateTime date;
+    Month month;
+    Dictionary<int,Month[]> loadedMonths;
+    [CascadingParameter]
+    private Server.Pages.Index IndexComponent { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        date = DateTime.Now;
+
+
+    var res = monthService.GetMonth(date);
+    month = res.Item1;
+
+    IndexComponent.SetNewCalendarDay(month[date.Day-1]);
+
+    Month[] tmp = new Month[12];
+
+    tmp[date.Month - 1] = month;
+    loadedMonths = new Dictionary<int,Month[]>();
+    loadedMonths.Add(date.Year, tmp);
+}
+
+public void AddMonths(int n)
+{
+    date = date.AddMonths(n);
+    SetNewMonth();
+}
+
+public void AddYears(int n)
+{
+    date = date.AddYears(n);
+    SetNewMonth();
+}
+
+private void SetNewMonth(){
+
+    // check if user has already loaded month 
+    if (loadedMonths.ContainsKey(date.Year)
+        && loadedMonths[date.Year][date.Month-1] != null)
+        month = loadedMonths[date.Year][date.Month-1];
+    else{
+
+        var res = monthService.GetMonth(date);
+        month = res.Item1;
+
+        if (loadedMonths.ContainsKey(date.Year)){
+            loadedMonths[date.Year][date.Month-1] = month;
+        }
+        else{
+            Month[] tmp = new Month[12];
+            tmp[date.Month - 1] = month;
+            loadedMonths.Add(date.Year, tmp);
+        }
+    }
+}
+}

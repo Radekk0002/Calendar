@@ -1,0 +1,104 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    html, body {
+        width: 100vw;
+        height: 100vh;
+        background: #FFA17F; /* fallback for old browsers */
+        background: -webkit-linear-gradient(to top, #00223E, #FFA17F); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to top, #00223E, #FFA17F); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+    #SignUpWrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 90%;
+        max-width: 300px;
+        min-height: 450px;
+        margin-top: 30px;
+        background-color: white;
+        border-radius: 7px;
+        text-align: center;
+        -webkit-box-shadow: 0px 0px 25px 1px rgba(0,0,0,0.64);
+        -moz-box-shadow: 0px 0px 25px 1px rgba(0,0,0,0.64);
+        box-shadow: 0px 0px 25px 1px rgba(0,0,0,0.64);
+    }
+
+    .SignUpContainer {
+        width: 100%;
+        max-width: 250px;
+        min-height: 290px;
+    }
+
+        .SignUpContainer > div:not(:last-of-type) {
+            min-height: 80px;
+        }
+
+    #termsAgreement {
+        font-size: .7rem;
+    }
+
+    .text-danger {
+        font-size: 11.5px;
+    }
+</style>
+
+<div id="SignUpWrapper" class="d-flex flex-column justify-content-around">
+    <h1 class="mt-4 mb-4 font-weight-bold">Sign Up</h1>
+    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="SignUpContainer ml-auto mr-auto d-flex flex-column align-items-center justify-content-center flex-grow-1">
+        <div class="mb-0">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="bi bi-envelope"></i>
+                    </div>
+                </div>
+                <input placeholder="Email" asp-for="Input.Email" class="form-control d-inline w-auto" />
+            </div>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <span class="text-danger">@Html.ValidationMessage("DuplicateUserName")</span>
+        </div>
+
+        <div class="mb-0">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="bi bi-lock"></i>
+                    </div>
+                </div>
+                <input placeholder="Password" asp-for="Input.Password" class="form-control d-inline w-auto" />
+            </div>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <span class="text-danger">@Html.ValidationMessage("Password")</span>
+        </div>
+
+        <div class="mb-0">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="bi bi-lock"></i>
+                    </div>
+                </div>
+                <input placeholder="Confirm Password" asp-for="Input.ConfirmPassword" class="form-control d-inline w-auto" />
+            </div>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="mb-0 w-100">
+            <div class="mb-2 text-left d-flex justify-content-center" id="termsAgreement">
+                <label class="form-check-label text-center">By registering I agree that ownership of the site doesn't take any responsibility</label>
+            </div>
+        </div>
+        <button type="submit" class="mt-2 mb-3 btn btn-primary rounded">Register</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

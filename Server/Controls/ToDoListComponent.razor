@@ -1,0 +1,87 @@
+﻿@using Server.Models
+@using Server.StateContainer
+
+
+@inject DayState DayState
+@inject ToDoService ToDoService
+
+@if (CalendarDay == null)
+{
+    <div class="loading"></div>
+}
+else
+{
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0 ml-4">@CalendarDay.date.ToShortDateString()</h3>
+        <button id="addToDo" class="btn btn-light mr-3" @onclick="ToggleForm">+</button>
+    </div>
+
+    @if(CalendarDay.ToDosCount > 0)
+    {
+        @for(int i = 0; i<CalendarDay.ToDosCount; i++)
+        {
+            <CascadingValue Value="CalendarDay[i]">
+                <ToDoComponent OnToDoDelete="DeleteToDo"></ToDoComponent>
+            </CascadingValue>
+        }
+    }
+
+    @if (showAddForm)
+    {
+        <div class="formOverlay" @onclick="ToggleForm">
+        </div>
+        <AddToDoForm Date="CalendarDay.date" OnCreatedToDo="AddToDo"></AddToDoForm>
+    }
+}
+
+
+
+@code {
+    [Parameter]
+    public Day CalendarDay { get; set;}
+
+    bool showAddForm = false;
+
+    private void ToggleForm()
+    {
+
+        showAddForm = !showAddForm;
+    }
+
+    protected void AddToDo(ToDo todo)
+    {
+
+        if(todo != null)
+        {
+            (bool, int) added = ToDoService.PostToDo(todo);
+            if (added.Item1)
+            {
+
+                todo.UserToDoId = added.Item2;
+
+
+                CalendarDay.AddToDo(todo);
+
+                DayState.UpdateToDos();
+            }
+
+        }
+        showAddForm = false;
+    }
+
+    protected void DeleteToDo(ToDo todo)
+    {
+        if (todo != null)
+        {
+            bool deleted = ToDoService.DeleteToDo(todo.UserToDoId);
+
+            if (deleted)
+            {
+                CalendarDay.RemoveToDo(todo);
+
+                DayState.UpdateToDos();
+            }
+        }
+    }
+
+}

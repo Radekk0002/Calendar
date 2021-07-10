@@ -1,0 +1,58 @@
+﻿@using Server.Models
+@using Server.StateContainer
+@inject DayState DayState
+
+@implements IDisposable
+
+@if (CalendarDay != null)
+{
+    <div class="@(today ? "currentDay":null)" @onclick="@ShowToDos">
+        <h5 class="float-right mt-2 mr-2">@CalendarDay.day</h5>
+        @if (CalendarDay.ToDosCount>0)
+            {
+                <h5 class="float-left mt-1 ml-1">!</h5>
+            }
+    </div>
+}
+
+
+
+@code {
+    [Parameter]
+    public Day CalendarDay { get; set; }
+
+    [CascadingParameter]
+    private Server.Pages.Index IndexComponent { get; set; }
+
+    private bool today = false;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        today = DateTime.Now.Year == CalendarDay.date.Year
+            && DateTime.Now.DayOfYear == CalendarDay.date.DayOfYear ? true : false;
+    }
+
+    protected override void OnInitialized()
+    {
+        DayState.OnChange += OnDayChangeHandler;
+    }
+
+    public void Dispose()
+    {
+        DayState.OnChange -= OnDayChangeHandler;
+    }
+
+    private async void OnDayChangeHandler()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void ShowToDos()
+    {
+        IndexComponent.SetNewCalendarDay(CalendarDay);
+    }
+
+
+
+}

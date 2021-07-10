@@ -1,0 +1,84 @@
+﻿@using Server.Models
+
+@if(todo != null){
+    <div class="ToDoForm d-flex flex-column">
+        <i class="bi bi-x-circle m-2 ml-auto" @onclick="async ()=>{await OnEditedToDo.InvokeAsync(null);}"></i>
+
+        <EditForm Model="@todo" OnValidSubmit="EditToDo" class="flex-grow-1 d-flex flex-column align-items-center">
+            <DataAnnotationsValidator/>
+            <div class="d-flex justify-content-center">
+              <p class="mb-0 mr-2">
+                    <label class="mb-0 d-flex align-items-center">
+                        <span class="mr-2">Start:</span>
+                        <TimePicker OnTimeChanged="UpdateStartTime" Time="todo.Start"></TimePicker>
+                    </label>
+                </p>
+
+
+                <p class="mb-0 ml-2">
+                    <label class="mb-0 d-flex align-items-center">
+                        <span class="mr-2">End:</span>
+                        <TimePicker OnTimeChanged="UpdateEndTime" Time="todo.End"></TimePicker>
+                    </label>
+                </p>
+            </div>
+
+
+            <div class="mt-3">
+                <label>
+                    <span class="mr-2">Text: </span>
+                    <InputText @bind-Value="todo.Text" class="form-control d-inline w-auto"></InputText>
+                    <ValidationMessage For="@(()=>todo.Text)"></ValidationMessage>
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary align-self-stretch rounded-0 mt-auto">Edit</button>
+        
+        </EditForm>
+    </div>
+
+}
+
+
+
+@code {
+    private ToDo todo;
+    [CascadingParameter]
+    public ToDo ToDo { get; set; }
+
+    [Parameter]
+    public EventCallback<ToDo> OnEditedToDo { get; set; }
+
+    public async void EditToDo()
+    {
+
+        this.ToDo.Start = todo.Start;
+        this.ToDo.End = todo.End;
+        this.ToDo.Text = todo.Text;
+
+        await OnEditedToDo.InvokeAsync(this.ToDo);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (this.ToDo != null)
+        {
+            todo = new ToDo();
+            todo.Start = this.ToDo.Start;
+            todo.End = this.ToDo.End;
+            todo.Text = this.ToDo.Text;
+        }
+    }
+
+    public void UpdateStartTime(DateTime time){
+            todo.Start = time;
+    }
+
+    public void UpdateEndTime(DateTime time)
+    {
+            todo.End = time;
+    }
+
+}

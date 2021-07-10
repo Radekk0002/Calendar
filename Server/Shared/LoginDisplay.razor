@@ -1,0 +1,36 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <ul class="w-100 navbar-nav flex-row justify-content-between m-0 p-0">
+            <li class="nav-item logo d-flex align-items-center">
+                <a class="nav-link text-dark p-0" href="/calendar">Calendar</a>
+            </li>
+            <li class="nav-item d-flex">
+                <div class="mr-3">
+                    <a id="manage" class="nav-link text-dark" href="Identity/Account/Manage" title="Manage">Account</a>
+
+                </div>
+                <div>
+                    <a id="logout" type="submit" class="nav-link btn btn-link text-dark" href="Identity/Account/LogOut">Logout</a>
+
+                </div>
+            </li>
+        </ul>
+    </Authorized>
+    <NotAuthorized>
+        <ul class="navbar-nav flex-row justify-content-end m-0 p-0">
+            <li class="nav-item mr-3">
+                <a class="nav-link text-dark" id="register" href="Identity/Account/Register">Register</a>
+            </li>
+            <li class="nav-item mr-3">
+                <a class="nav-link text-dark" id="login" href="Identity/Account/Login">Login</a>
+            </li>
+        </ul>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+<style scoped>
+    .logo{
+        font-size: 28px;
+    }
+</style>

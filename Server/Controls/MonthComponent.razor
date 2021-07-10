@@ -1,0 +1,30 @@
+﻿@using Server.Models
+@using System
+
+@if(CalendarMonth==null){
+    <div class="loading"></div>
+}
+else{
+    @for (int i=0; i < CalendarMonth.Rows; i++)
+    {
+        <div class="calendarCells d-flex justify-content-start">
+
+        @for(int j = i*7; j < (i+1)*7 && j < CalendarMonth.numOfDays + CalendarMonth.FirstDaysToSkip; j++){
+            @if (j < CalendarMonth.FirstDaysToSkip)
+            {
+                <div class="inactive"></div>
+            }
+            else{
+                <DayComponent CalendarDay="@CalendarMonth[j - CalendarMonth.FirstDaysToSkip]"></DayComponent>
+            }
+        }
+        </div>
+    }
+}
+
+
+
+@code {
+    [Parameter]
+    public Month CalendarMonth{ get; set; }
+}

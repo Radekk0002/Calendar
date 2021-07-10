@@ -1,0 +1,336 @@
+﻿@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
+
+
+* {
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    background-color: #00223E;
+    color: #edb699;
+}
+
+
+#appContainer{
+    min-height: 100vh;
+
+}
+
+.validation-message{
+    font-size: .85rem;
+    text-align: center;
+}
+
+.changeDateButton {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transform: translateY(-3px);
+}
+
+#calendarWrapper {
+    position: relative;
+    background: #FFA17F; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #00223E, #FFA17F); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #00223E, #FFA17F); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#calendarContainer {
+    max-width: 95%;
+    min-height: 430px;
+    margin: 15px auto 15px;
+    -webkit-box-shadow: 0px 0px 25px -6px rgba(0,0,0,0.64);
+    -moz-box-shadow: 0px 0px 25px -6px rgba(0,0,0,0.64);
+    box-shadow: 0px 0px 25px -6px rgba(0,0,0,0.64);
+    background-color: white;
+    border-radius: 10px;
+    color: #edb699;
+}
+
+#calendarContainer > div{
+    width: 100%;
+    max-width: 95%;
+    margin: 15px auto 15px;
+}
+
+.calendarHeader{
+            border: 1px dotted #c2d1e2;
+            border-radius: 10px 10px 0 0;
+}
+
+    .calendarHeader > h3 {
+        padding: 4px 0px 4px 4px;
+        margin: 0;
+        max-width: 14.285%;
+        flex-grow: 1;
+        border-right: 1px dotted #c2d1e2;
+        font-size: .9rem;
+    }
+
+    .calendarHeader > h3:last-child {
+        border-right: 0;
+    }
+
+.calendarCells {
+    height: 60px;
+}
+
+.calendarCells >.inactive{
+    cursor: unset;
+    background-color: unset!important;
+    pointer-events: none;
+}
+
+    .calendarCells > div {
+        max-width: 14.286%;
+        flex-grow: 1;
+        border: 1px dotted #c2d1e2;
+        border-right: 0;
+        border-top: 0;
+        cursor: pointer;
+    }
+
+        .calendarCells > div:hover {
+            background-color: #fcfcfd;
+        }
+
+        .calendarCells > div:last-child {
+            border-right: 1px dotted #c2d1e2;
+        }
+
+.calendarCells h5 {
+    font-size: .8rem;
+}
+
+.currentDay {
+    background-color: #f0f4f8!important;
+}
+
+.currentDay:hover {
+    background-color: #f0f4f8;
+}
+
+#toDoList {
+    position: relative;
+    min-height: 200px;
+    overflow-y: auto;
+}
+
+#toDoList::-webkit-scrollbar{
+    display: none;
+}
+
+#toDoList h3 {
+    font-weight: bold;
+}
+
+#toDoList i{
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+#addToDo {
+    font-size: 2.5rem;
+    line-height: 1;
+    padding: .1rem .5rem;
+    color: #edb699;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 6px 2px rgba(234,172,139,0.65);
+    -moz-box-shadow: 0px 0px 6px 2px rgba(234,172,139,0.65);
+    box-shadow: 0px 0px 6px 2px rgba(234,172,139,0.65);
+}
+
+#toDo{
+    max-width: 25ch;
+}
+
+#toDoText{
+    overflow: hidden;
+    min-height: 2rem;
+    word-wrap: break-word;
+}
+
+.formOverlay, .selectOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(238,238,238,0.25);
+    z-index: 10;
+    cursor: pointer;
+}
+
+.selectOverlay {
+    background-color: unset;
+    z-index: 25;
+}
+
+.ToDoForm {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #2a4059;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+}
+
+#toDoList .ToDoForm i {
+    font-size: 1.7rem;
+}
+
+
+input.invalid{
+    border-color: red;
+}
+
+.selectContainer{
+    position: relative;
+    min-width: 45px;
+    height: 35px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+#toDoList .ToDoForm .selectContainer i {
+    font-size: 10px;
+}
+
+.optionsContainer {
+    position: absolute;
+    top: 100%;
+    height: 90px;
+    background-color: white;
+    color: black;
+    width: 100%;
+    z-index: 30;
+    overflow-y: auto;
+}
+
+.optionsContainer::-webkit-scrollbar {
+    width: 5px;
+    padding: 0;
+}
+.optionsContainer::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+}
+
+.optionsContainer div {
+    text-align: center;
+    line-height: 30px;
+}
+
+    .optionsContainer div:hover {
+        background-color: #ddd;
+    }
+
+.loading{
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 35px;
+    height: 35px;
+}
+
+    .loading:after {
+        content: " ";
+        display: block;
+        width: 35px;
+        height: 35px;
+        border-radius: 100%;
+        border: 3px solid black;
+        border-color: black transparent black transparent;
+        animation: spin 1.2s linear infinite;
+    }
+
+
+@keyframes spin {
+    100%{
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+} 
+
+
+@media (min-height: 800px){
+    .optionsContainer{
+        height: 120px;
+    }
+}
+
+@media (min-width: 768px){
+
+    .SignInContainer {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    #calendarWrapper {
+        background: -webkit-linear-gradient(to right, #00223E, #FFA17F); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #00223E, #FFA17F); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+        .calendarHeader > h3 {
+        padding: 8px 0px 8px 8px;
+        font-weight: bold;
+    }
+
+
+    #toDoList {
+        min-width: 17rem;
+    }
+
+    .ToDoForm {
+        max-height: 18rem;
+    }
+
+    #calendarContainer{
+        min-height: 560px;
+    }
+
+    .calendarHeader{
+        height: 45px;
+    }
+
+    .calendarCells{
+        height: 75px;
+    }
+}
+
+@media (min-width: 1024px){
+    #toDoList {
+        min-width: 25rem;
+    }
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }

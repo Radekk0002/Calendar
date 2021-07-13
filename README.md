@@ -1,6 +1,6 @@
-# CalendarToDoApp
+# Calendar with ToDos
 
-Calendar created with Blazor WebAssembly, MS SQL, C# REST Web API
+Calendar created with Blazor Server, SQL Server
 
 ## Table of contents
 
@@ -10,18 +10,14 @@ Calendar created with Blazor WebAssembly, MS SQL, C# REST Web API
 
 ## General info
 
-This project is simple calendar that allows to set events on specific dates which are saved in database
+This project is calendar that allows to set events on specific dates which are saved in database
 
 ## Technologies
 
 - Project is created with:
-    - Blazor WebAssembly with .Net 5.0
-    - MS SQL (Not yet)
-    - C# REST Web API (Not yet)
+    - Blazor Server with .Net 5.0
+    - SQL Server
 
 ## To Do
 
-- Add some animations
-- Change overlay
-- Connect to database
-- Create Sign up and Log in
+- Add methods to remind password

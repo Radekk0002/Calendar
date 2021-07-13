@@ -43,7 +43,7 @@
 
 @code {
     private ToDo todo;
-    [CascadingParameter]
+    [Parameter]
     public ToDo ToDo { get; set; }
 
     [Parameter]
@@ -59,26 +59,26 @@
         await OnEditedToDo.InvokeAsync(this.ToDo);
     }
 
-    protected override void OnInitialized()
+protected override void OnParametersSet()
+{
+    if (this.ToDo != null)
     {
-        base.OnInitialized();
-
-        if (this.ToDo != null)
-        {
-            todo = new ToDo();
-            todo.Start = this.ToDo.Start;
-            todo.End = this.ToDo.End;
-            todo.Text = this.ToDo.Text;
-        }
+        todo = new ToDo();
+        todo.Start = this.ToDo.Start;
+        todo.End = this.ToDo.End;
+        todo.Text = this.ToDo.Text;
     }
 
-    public void UpdateStartTime(DateTime time){
-            todo.Start = time;
-    }
+    base.OnParametersSet();
+}
 
-    public void UpdateEndTime(DateTime time)
-    {
-            todo.End = time;
-    }
+public void UpdateStartTime(DateTime time){
+    todo.Start = time;
+}
+
+public void UpdateEndTime(DateTime time)
+{
+    todo.End = time;
+}
 
 }

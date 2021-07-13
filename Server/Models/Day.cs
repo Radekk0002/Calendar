@@ -20,6 +20,13 @@ namespace Server.Models
 
         public int ToDosCount => toDos.Count;
 
+        public event Action OnChangeState;
+
+        public void NotifyStateChanged()
+        {
+            OnChangeState?.Invoke();
+        }
+
         public ToDo this[int i]
         {
             get { return toDos[i]; }

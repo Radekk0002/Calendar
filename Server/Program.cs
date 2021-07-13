@@ -14,6 +14,7 @@ namespace Server
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+            var host = new WebHostBuilder().CaptureStartupErrors(true).UseSetting("detailedErrors", "true");
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

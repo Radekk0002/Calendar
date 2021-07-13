@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Server.Areas.Identity;
 using Server.Data;
-using Server.StateContainer;
+/*using Server.StateContainer;*/
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +63,6 @@ namespace Server
             services.AddScoped<MonthService>();
             services.AddScoped<ToDoService>();
 
-            services.AddSingleton<DayState>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

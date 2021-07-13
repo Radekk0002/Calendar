@@ -1,6 +1,4 @@
 ﻿@using Server.Models
-@using Server.StateContainer
-@inject DayState DayState
 
 @implements IDisposable
 
@@ -8,10 +6,10 @@
 {
     <div class="@(today ? "currentDay":null)" @onclick="@ShowToDos">
         <h5 class="float-right mt-2 mr-2">@CalendarDay.day</h5>
-        @if (CalendarDay.ToDosCount>0)
-            {
-                <h5 class="float-left mt-1 ml-1">!</h5>
-            }
+        @if (CalendarDay.ToDosCount > 0)
+        {
+            <h5 class="float-left mt-1 ml-1">!</h5>
+        }
     </div>
 }
 
@@ -30,17 +28,16 @@
     {
         base.OnParametersSet();
         today = DateTime.Now.Year == CalendarDay.date.Year
-            && DateTime.Now.DayOfYear == CalendarDay.date.DayOfYear ? true : false;
-    }
+        && DateTime.Now.DayOfYear == CalendarDay.date.DayOfYear ? true : false;
 
-    protected override void OnInitialized()
-    {
-        DayState.OnChange += OnDayChangeHandler;
+        // To prevent more than 1 same actions - OnInitialized and OnAfterRender doesnt work
+        CalendarDay.OnChangeState -= OnDayChangeHandler;
+        CalendarDay.OnChangeState += OnDayChangeHandler;
     }
 
     public void Dispose()
     {
-        DayState.OnChange -= OnDayChangeHandler;
+        CalendarDay.OnChangeState -= OnDayChangeHandler;
     }
 
     private async void OnDayChangeHandler()
@@ -52,7 +49,5 @@
     {
         IndexComponent.SetNewCalendarDay(CalendarDay);
     }
-
-
 
 }

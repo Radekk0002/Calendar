@@ -1,23 +1,28 @@
 ﻿@using Server.Models
 @using System
 
-@if(CalendarMonth==null){
+@if (CalendarMonth == null)
+{
     <div class="loading"></div>
 }
-else{
-    @for (int i=0; i < CalendarMonth.Rows; i++)
+else
+{
+    @for (int i = 0; i < CalendarMonth.Rows; i++)
     {
         <div class="calendarCells d-flex justify-content-start">
 
-        @for(int j = i*7; j < (i+1)*7 && j < CalendarMonth.numOfDays + CalendarMonth.FirstDaysToSkip; j++){
-            @if (j < CalendarMonth.FirstDaysToSkip)
+            @for (int j = i * 7; j < (i + 1) * 7 && j < CalendarMonth.numOfDays + CalendarMonth.FirstDaysToSkip; j++)
             {
-                <div class="inactive"></div>
+                int k = j;
+                @if (k < CalendarMonth.FirstDaysToSkip)
+                {
+                    <div class="inactive"></div>
+                }
+                else
+                {
+                    <DayComponent CalendarDay="@CalendarMonth[k - CalendarMonth.FirstDaysToSkip]"></DayComponent>
+                }
             }
-            else{
-                <DayComponent CalendarDay="@CalendarMonth[j - CalendarMonth.FirstDaysToSkip]"></DayComponent>
-            }
-        }
         </div>
     }
 }
@@ -26,5 +31,8 @@ else{
 
 @code {
     [Parameter]
-    public Month CalendarMonth{ get; set; }
+    public Month CalendarMonth { get; set; }
+
+    [CascadingParameter]
+    private Server.Pages.Index IndexComponent { get; set; }
 }

@@ -1,8 +1,5 @@
 ﻿@using Server.Models
-@using Server.StateContainer
 
-
-@inject DayState DayState
 @inject ToDoService ToDoService
 
 @if (CalendarDay == null)
@@ -13,23 +10,39 @@ else
 {
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="mb-0 ml-4">@CalendarDay.date.ToShortDateString()</h3>
-        <button id="addToDo" class="btn btn-light mr-3" @onclick="ToggleForm">+</button>
+        <button id="addToDo" class="btn btn-light mr-3" @onclick="()=>showAddForm = !showAddForm">+</button>
     </div>
 
-    @if(CalendarDay.ToDosCount > 0)
+    @for (int i = 0; i < CalendarDay.ToDosCount; i++)
     {
-        @for(int i = 0; i<CalendarDay.ToDosCount; i++)
+        int j = i;
+        // ToDo
+        @if (CalendarDay[j] != null)
         {
-            <CascadingValue Value="CalendarDay[i]">
-                <ToDoComponent OnToDoDelete="DeleteToDo"></ToDoComponent>
-            </CascadingValue>
+
+            <div class="ml-5 d-flex justify-conent-between align-items-start">
+                <div id="toDo" class="flex-grow-1">
+                    <h6>@CalendarDay[j].Start.ToString("HH:mm") - @CalendarDay[j].End.ToString("HH:mm")</h6>
+                    <p id="toDoText" class="m-0 pl-2 pr-1">@CalendarDay[j].Text</p>
+                </div>
+                <div class="ml-2 mr-4">
+                    <i class="fas fa-edit mr-2 p-1" @onclick="() => { showEditForm = !showEditForm; todo = CalendarDay[j];}"></i>
+                    <i class="fas fa-trash p-1" @onclick="() => {DeleteToDo(CalendarDay[j]); }"></i>
+                </div>
+            </div>
+            @if (showEditForm && todo != null)
+            {
+                <div class="formOverlay" @onclick="()=>showEditForm = false">
+                </div>
+                <EditToDoForm ToDo="todo" OnEditedToDo="EditToDo"></EditToDoForm>
+            }
+
         }
     }
 
     @if (showAddForm)
     {
-        <div class="formOverlay" @onclick="ToggleForm">
-        </div>
+        <div class="formOverlay" @onclick="()=>showAddForm = false"></div>
         <AddToDoForm Date="CalendarDay.date" OnCreatedToDo="AddToDo"></AddToDoForm>
     }
 }
@@ -37,49 +50,49 @@ else
 
 
 @code {
+    bool showEditForm = false, showAddForm = false;
+
+    private ToDo todo;
+
     [Parameter]
-    public Day CalendarDay { get; set;}
-
-    bool showAddForm = false;
-
-    private void ToggleForm()
-    {
-
-        showAddForm = !showAddForm;
-    }
+    public Day CalendarDay { get; set; }
 
     protected void AddToDo(ToDo todo)
     {
-
-        if(todo != null)
+        if (todo != null)
         {
             (bool, int) added = ToDoService.PostToDo(todo);
             if (added.Item1)
             {
-
                 todo.UserToDoId = added.Item2;
 
-
                 CalendarDay.AddToDo(todo);
-
-                DayState.UpdateToDos();
+                CalendarDay.NotifyStateChanged();
             }
-
         }
         showAddForm = false;
+    }
+
+    public void EditToDo(ToDo todo)
+    {
+        if (todo != null)
+        {
+            ToDoService.UpdateToDo(todo, todo.UserToDoId);
+        }
+        showEditForm = false;
     }
 
     protected void DeleteToDo(ToDo todo)
     {
         if (todo != null)
         {
+
             bool deleted = ToDoService.DeleteToDo(todo.UserToDoId);
 
             if (deleted)
             {
                 CalendarDay.RemoveToDo(todo);
-
-                DayState.UpdateToDos();
+                CalendarDay.NotifyStateChanged();
             }
         }
     }

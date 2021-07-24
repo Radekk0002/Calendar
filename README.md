@@ -17,7 +17,3 @@ This project is calendar that allows to set events on specific dates which are s
 - Project is created with:
     - Blazor Server with .Net 5.0
     - SQL Server
-
-## To Do
-
-- Add methods to remind password
